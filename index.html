@@ -1,148 +1,224 @@
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>给你的一封情书</title>
-<style>
-*{box-sizing:border-box}
-body{margin:0;background:linear-gradient(135deg,#fff0f3,#fce4ec,#fff7f0);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#633b48;min-height:100vh;padding:24px}
-main{max-width:680px;margin:auto;background:#ffffffd9;border-radius:24px;padding:25px;box-shadow:0 10px 40px #0001}
-h1{text-align:center;color:#bd607d}
-p{text-align:center;line-height:1.8}
-input,textarea,button{width:100%;padding:13px;margin:9px 0;border:1px solid #e8cbd5;border-radius:12px;font-size:16px}
-button{background:#d96c8d;color:white;border:0;font-weight:bold;cursor:pointer}
-#photos{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-#photos img{width:100%;border-radius:14px}
-#result{word-break:break-all;margin-top:15px}
-.hide{display:none}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>给你的一封情书</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { min-height: 100vh; margin: 0; padding: 24px; color: #633b48; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: linear-gradient(135deg, #fff0f3, #fce4ec, #fff7f0); }
+    main { max-width: 680px; margin: auto; padding: 28px; border-radius: 24px; background: rgba(255,255,255,.88); box-shadow: 0 10px 40px rgba(74,25,44,.10); }
+    h1, h2 { color: #bd607d; text-align: center; }
+    p { line-height: 1.8; }
+    #intro { text-align: center; }
+    input, textarea, button { width: 100%; margin: 9px 0; padding: 13px; border: 1px solid #e8cbd5; border-radius: 12px; font: inherit; font-size: 16px; }
+    textarea { resize: vertical; }
+    button { border: 0; color: #fff; font-weight: 700; cursor: pointer; background: #d96c8d; }
+    button:disabled { cursor: wait; opacity: .7; }
+    #photos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+    #photos img { width: 100%; border-radius: 14px; object-fit: cover; aspect-ratio: 1; }
+    #result { margin-top: 16px; word-break: break-all; }
+    .status { padding: 10px 12px; border-radius: 10px; background: #fff4f7; }
+    .error { color: #a53455; background: #fff0f2; }
+  </style>
 </head>
 <body>
-<main>
-<h1>💕 给你的一封情书 💕</h1>
-<p id="intro">把心意写下来，留给最特别的人。</p>
+  <main>
+    <h1>💕 给你的一封情书 💕</h1>
+    <p id="intro">把心意写下来，留给最特别的人。</p>
 
-<div id="editor">
-<input id="to" placeholder="写下收信人的名字">
-<input id="from" placeholder="写下你的名字">
-<input id="date" type="date">
-<textarea id="message" rows="6" placeholder="写下你想对TA说的话..."></textarea>
-<label>选择照片（可多选）</label>
-<input id="files" type="file" accept="image/*" multiple>
-<button id="save" onclick="saveCard()">保存并生成分享链接 ❤️</button>
-</div>
+    <section id="editor">
+      <input id="to" maxlength="80" placeholder="写下收信人的名字" aria-label="收信人">
+      <input id="from" maxlength="80" placeholder="写下你的名字" aria-label="寄信人">
+      <input id="date" type="date" aria-label="日期">
+      <textarea id="message" rows="6" maxlength="5000" placeholder="写下你想对 TA 说的话..." aria-label="情书内容"></textarea>
+      <label for="files">选择照片，可多选</label>
+      <input id="files" type="file" accept="image/*" multiple>
+      <button id="save" type="button">保存并生成分享链接 ❤️</button>
+    </section>
 
-<div id="photos"></div>
-<div id="letter"></div>
-<div id="result"></div>
-</main>
+    <section id="card" hidden>
+      <div id="letter"></div>
+      <div id="photos"></div>
+    </section>
+    <div id="result" aria-live="polite"></div>
+  </main>
 
-<script>
-const SUPABASE_URL = "https://cseiuubvjuzostnjymub.supabase.co";
-const SUPABASE_KEY = "sb_publishable_7lKtu0PjfkHA8pkzrj93VA__fBNbfLO";
-const BUCKET = "love-files";
+  <script>
+    const SUPABASE_URL = "https://cseiuubvjuzostnjymub.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_7lKtu0PjfkHA8pkzrj93VA__fBNbfLO";
+    const BUCKET = "love-files";
+    const STORAGE = SUPABASE_URL + "/storage/v1/object/";
+    const PUBLIC_STORAGE = SUPABASE_URL + "/storage/v1/object/public/";
 
-function headers(extra={}) {
-  return { "apikey":SUPABASE_KEY, "Authorization":"Bearer "+SUPABASE_KEY, ...extra };
-}
+    const editor = document.getElementById("editor");
+    const card = document.getElementById("card");
+    const intro = document.getElementById("intro");
+    const saveButton = document.getElementById("save");
+    const result = document.getElementById("result");
+    const letter = document.getElementById("letter");
+    const photos = document.getElementById("photos");
 
-function render(data){
-  document.getElementById("editor").classList.add("hide");
-  document.getElementById("intro").textContent="❤️ 一份来自心底的礼物 ❤️";
-  document.getElementById("letter").innerHTML=
-    "<h2 style='text-align:center'>亲爱的 "+esc(data.to)+"</h2>"+
-    "<p>"+esc(data.message).replace(/\n/g,"<br>")+"</p>"+
-    "<p>—— "+esc(data.from)+"</p>"+
-    (data.date ? "<p>"+esc(data.date)+"</p>" : "");
-  document.getElementById("photos").innerHTML=(data.photos||[]).map(url=>
-    '<img src="'+url+'" alt="爱意照片">'
-  ).join("");
-}
-
-function esc(s){
-  return String(s||"").replace(/[&<>"']/g,c=>({
-    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;',"'":"&#39;"
-  }[c]));
-}
-
-async function upload(path,file){
-  const response=await fetch(SUPABASE_URL+"/storage/v1/object/"+BUCKET+"/"+path,{
-    method:"POST",
-    headers:headers({"Content-Type":file.type||"application/octet-stream"}),
-    body:file
-  });
-  if(!response.ok)throw new Error("上传失败："+await response.text());
-  return SUPABASE_URL+"/storage/v1/object/public/"+BUCKET+"/"+path;
-}
-
-async function saveCard(){
-  const btn=document.getElementById("save");
-  btn.disabled=true;
-  btn.textContent="正在保存，请稍等...";
-  try{
-    const id=crypto.randomUUID();
-    const files=document.getElementById("files").files;
-    const photos=[];
-    for(let i=0;i<files.length;i++){
-      const ext=(files[i].name.split(".").pop()||"jpg").replace(/[^a-zA-Z0-9]/g,"");
-      photos.push(await upload("cards/"+id+"/photo"+i+"."+ext,files[i]));
+    function escapeHtml(value) {
+      return String(value || "").replace(/[&<>"']/g, function (character) {
+        return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[character];
+      });
     }
-    const data={
-      to:document.getElementById("to").value,
-      from:document.getElementById("from").value,
-      date:document.getElementById("date").value,
-      message:document.getElementById("message").value,
-      photos
-    };
-    const manifest=new Blob([JSON.stringify(data)],{type:"application/json"});
-    const response=await fetch(SUPABASE_URL+"/storage/v1/object/"+BUCKET+"/cards/"+id+"/card.json",{
-      method:"POST",
-      headers:headers({"Content-Type":"application/json"}),
-      body:manifest
-    });
-    if(!response.ok)throw new Error("保存卡片失败："+await response.text());
-    const link=location.origin+location.pathname+"?id="+id;
-    document.getElementById("result").innerHTML=
-      "<p>❤️ 卡片已保存！</p><input id='sharelink' value='"+esc(link)+"' readonly>"+
-      "<button onclick='copyLink()'>复制分享链接</button>";
-    render(data);
-  }catch(e){
-    alert("保存失败："+e.message);
-    btn.disabled=false;
-    btn.textContent="保存并生成分享链接 ❤️";
-  }
-}
 
-async function copyLink(){
-  const input=document.getElementById("sharelink");
-  try{
-    await navigator.clipboard.writeText(input.value);
-    alert("链接已复制！");
-  }catch(e){
-    input.select();
-    document.execCommand("copy");
-    alert("链接已复制！");
-  }
-}
+    function encodePath(path) {
+      return path.split("/").map(encodeURIComponent).join("/");
+    }
 
-async function loadCard(){
-  const id=new URLSearchParams(location.search).get("id");
-  if(!id)return;
-  if(!/^[a-zA-Z0-9-]+$/.test(id))return;
-  document.getElementById("intro").textContent="正在打开爱的礼物...";
-  try{
-    const response=await fetch(SUPABASE_URL+"/storage/v1/object/public/"+BUCKET+"/cards/"+id+"/card.json");
-    if(!response.ok)throw new Error("卡片不存在");
-    const data=await response.json();
-    render(data);
-  }catch(e){
-    document.getElementById("intro").textContent="暂时无法打开这份礼物。";
-  }
-}
+    function objectUrl(path) {
+      return STORAGE + encodeURIComponent(BUCKET) + "/" + encodePath(path);
+    }
 
-loadCard();
-</script>
+    function publicUrl(path) {
+      return PUBLIC_STORAGE + encodeURIComponent(BUCKET) + "/" + encodePath(path);
+    }
+
+    function headers(contentType) {
+      const base = { apikey: SUPABASE_KEY, Authorization: "Bearer " + SUPABASE_KEY };
+      if (contentType) base["Content-Type"] = contentType;
+      return base;
+    }
+
+    function makeCardId() {
+      if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+      const values = new Uint32Array(4);
+      crypto.getRandomValues(values);
+      return Array.from(values, function (value) { return value.toString(16); }).join("-");
+    }
+
+    function showStatus(message, isError) {
+      result.innerHTML = '<p class="status' + (isError ? " error" : "") + '">' + escapeHtml(message) + "</p>";
+    }
+
+    function storageMessage(status, detail) {
+      if (status === 401 || status === 403) {
+        return "Supabase 拒绝了保存请求。请确认 love-files bucket 已公开，且 anon 可以向 storage.objects 新增文件。";
+      }
+      if (status === 413) return "照片文件太大，无法上传。请换一张较小的照片再试。";
+      return "保存失败（" + status + "）。" + (detail ? detail.slice(0, 160) : "");
+    }
+
+    async function upload(path, body, type) {
+      const response = await fetch(objectUrl(path), {
+        method: "POST",
+        headers: headers(type),
+        body: body
+      });
+      if (!response.ok) throw new Error(storageMessage(response.status, await response.text()));
+    }
+
+    function renderCard(data) {
+      editor.hidden = true;
+      card.hidden = false;
+      intro.textContent = "❤️ 一份来自心底的礼物 ❤️";
+      letter.innerHTML =
+        "<h2>亲爱的 " + escapeHtml(data.to) + "</h2>" +
+        "<p>" + escapeHtml(data.message).replace(/\n/g, "<br>") + "</p>" +
+        (data.from ? "<p>—— " + escapeHtml(data.from) + "</p>" : "") +
+        (data.date ? "<p>" + escapeHtml(data.date) + "</p>" : "");
+
+      photos.innerHTML = "";
+      const photoUrls = Array.isArray(data.photos) ? data.photos : [];
+      photoUrls.forEach(function (url) {
+        if (typeof url !== "string" || !url.startsWith(PUBLIC_STORAGE)) return;
+        const image = document.createElement("img");
+        image.src = url;
+        image.alt = "爱意照片";
+        image.loading = "lazy";
+        photos.appendChild(image);
+      });
+    }
+
+    async function saveCard() {
+      const message = document.getElementById("message").value.trim();
+      if (!message) {
+        showStatus("先写下一句想说的话，再保存吧。", true);
+        return;
+      }
+
+      saveButton.disabled = true;
+      saveButton.textContent = "正在保存，请稍等...";
+      result.innerHTML = "";
+
+      try {
+        const id = makeCardId();
+        const selectedFiles = Array.from(document.getElementById("files").files);
+        const photoUrls = [];
+
+        for (let index = 0; index < selectedFiles.length; index += 1) {
+          const file = selectedFiles[index];
+          const extension = ((file.name.split(".").pop() || "jpg").replace(/[^a-z0-9]/gi, "").slice(0, 10) || "jpg");
+          const path = "cards/" + id + "/photo-" + index + "." + extension;
+          await upload(path, file, file.type || "application/octet-stream");
+          photoUrls.push(publicUrl(path));
+        }
+
+        const data = {
+          to: document.getElementById("to").value.trim(),
+          from: document.getElementById("from").value.trim(),
+          date: document.getElementById("date").value,
+          message: message,
+          photos: photoUrls
+        };
+        await upload("cards/" + id + "/card.json", JSON.stringify(data), "application/json");
+
+        const shareLink = new URL(window.location.href);
+        shareLink.search = "";
+        shareLink.hash = "";
+        shareLink.searchParams.set("id", id);
+
+        renderCard(data);
+        result.innerHTML =
+          "<p class='status'>❤️ 卡片已保存，可以把这个链接发给对方。</p>" +
+          "<input id='share-link' value='" + escapeHtml(shareLink.href) + "' readonly aria-label='分享链接'>" +
+          "<button id='copy-link' type='button'>复制分享链接</button>";
+
+        document.getElementById("copy-link").addEventListener("click", async function () {
+          const input = document.getElementById("share-link");
+          try {
+            await navigator.clipboard.writeText(input.value);
+          } catch (error) {
+            input.select();
+            document.execCommand("copy");
+          }
+          document.getElementById("copy-link").textContent = "链接已复制 ❤️";
+        });
+      } catch (error) {
+        showStatus(error.message || "保存失败，请稍后重试。", true);
+        saveButton.disabled = false;
+        saveButton.textContent = "保存并生成分享链接 ❤️";
+      }
+    }
+
+    async function loadCard() {
+      const id = new URLSearchParams(window.location.search).get("id");
+      if (!id) return;
+      if (!/^[a-z0-9-]{20,80}$/i.test(id)) {
+        showStatus("分享链接格式不正确。", true);
+        return;
+      }
+
+      intro.textContent = "正在打开爱的礼物...";
+      try {
+        const response = await fetch(publicUrl("cards/" + id + "/card.json"));
+        if (!response.ok) {
+          throw new Error(response.status === 404 ? "这张卡片不存在或已被删除。" : "暂时无法打开这张卡片。");
+        }
+        const data = await response.json();
+        if (!data || typeof data.message !== "string") throw new Error("卡片内容格式不正确。");
+        renderCard(data);
+      } catch (error) {
+        editor.hidden = true;
+        showStatus(error.message || "暂时无法打开这张卡片。", true);
+      }
+    }
+
+    saveButton.addEventListener("click", saveCard);
+    loadCard();
+  </script>
 </body>
 </html>
