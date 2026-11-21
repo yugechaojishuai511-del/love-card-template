@@ -4,270 +4,261 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>给你的浪漫</title>
+<title>一封给你的情书 ❤️</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;color:#634b50;font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:linear-gradient(135deg,#fff5f5,#fce8ed,#fff8ef);overflow-x:hidden}
-button{cursor:pointer;border:none;border-radius:30px;padding:13px 24px;background:#d87891;color:white;font-size:15px;transition:.3s}
-button:hover{transform:translateY(-2px);opacity:.9}
-h1,h2{font-weight:500}
-.container{max-width:900px;margin:auto;padding:30px 20px}
+body{margin:0;font-family:"Segoe UI","PingFang SC",sans-serif;background:linear-gradient(135deg,#fff0f5,#ffe4ec,#fff8f0);color:#633c4b;min-height:100vh}
+button,input,textarea{font:inherit}
+button{cursor:pointer;border:none;border-radius:25px;padding:12px 20px;background:#e8799a;color:white}
+button:hover{opacity:.85}
+.wrap{max-width:850px;margin:auto;padding:22px}
+.panel,.letter{background:#ffffffd9;border-radius:22px;padding:25px;margin:18px auto;box-shadow:0 8px 35px #d48ba533}
+h1,h2{text-align:center;color:#c45579}
+input,textarea{width:100%;padding:12px;margin:7px 0;border:1px solid #edc4d2;border-radius:12px;background:white;color:#633c4b}
+textarea{min-height:110px;resize:vertical}
+label{display:block;margin-top:12px;font-size:14px}
 .hidden{display:none!important}
-#intro{position:fixed;inset:0;z-index:10;display:flex;justify-content:center;align-items:center;flex-direction:column;text-align:center;background:linear-gradient(135deg,#ffe6ec,#fff5f0)}
-.envelope{font-size:90px;animation:float 2s infinite ease-in-out}
-@keyframes float{50%{transform:translateY(-12px)}}
-.hero{padding:55px 0 30px;text-align:center}
-.hero h1{font-size:35px;color:#c96d88}
-.subtitle{color:#a9848c}
-.days{display:inline-block;padding:22px 35px;margin:25px 0;border-radius:25px;background:#fff9f5;box-shadow:0 8px 30px #e9c7ce55}
-.days strong{font-size:40px;color:#d87891}
-.section{margin:40px 0}
-.section-title{text-align:center;color:#c96d88;margin-bottom:25px}
-.gallery{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
-.photo-card{background:white;padding:12px;border-radius:20px;box-shadow:0 8px 25px #e8c8ce55}
-.photo-card img{width:100%;height:280px;object-fit:cover;border-radius:14px;cursor:pointer}
-.photo-card p{text-align:center;line-height:1.8;margin:12px 5px}
-.letter{background:#fffaf5;border-radius:24px;padding:30px;line-height:2.2;white-space:pre-line;box-shadow:0 8px 25px #e8c8ce44}
-#letterText{min-height:120px}
-.btn-row{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin:25px 0}
-#surprise{display:none;background:#fff0f5;padding:30px;border-radius:25px;text-align:center;line-height:2;margin:25px 0}
-footer{text-align:center;padding:40px;color:#b38a94}
-#viewer{position:fixed;inset:0;z-index:20;background:#000d;display:none;justify-content:center;align-items:center;padding:20px}
-#viewer img{max-width:100%;max-height:85vh;border-radius:15px}
-#viewer span{position:absolute;top:20px;right:25px;color:white;font-size:35px;cursor:pointer}
-.heart{position:fixed;bottom:-30px;pointer-events:none;animation:rise 6s linear forwards;z-index:2}
-@keyframes rise{to{transform:translateY(-110vh);opacity:0}}
-@media(max-width:600px){.container{padding:20px 15px}.hero h1{font-size:28px}.gallery{grid-template-columns:1fr}.photo-card img{height:260px}}
-@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+.photos{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.photos img{width:100%;height:230px;object-fit:cover;border-radius:15px;background:#ffe6ee}
+#letterText{white-space:pre-wrap;line-height:2;font-size:17px}
+.center{text-align:center}
+#intro{min-height:80vh;display:flex;align-items:center;justify-content:center;text-align:center}
+#intro .panel{width:100%;max-width:500px}
+#qr{max-width:180px;margin:15px auto;display:block}
+small{color:#9d7182}
+.heart{font-size:38px;animation:pulse 1.5s infinite}
+@keyframes pulse{50%{transform:scale(1.2)}}
+footer{text-align:center;padding:25px;color:#a77a8c}
+#viewer{position:fixed;inset:0;background:#000d;display:flex;align-items:center;justify-content:center;z-index:9}
+#viewer img{max-width:95%;max-height:90vh;border-radius:15px}
+@media(max-width:600px){.wrap{padding:10px}.panel,.letter{padding:18px}.photos img{height:170px}}
 </style>
 </head>
 <body>
+<div class="wrap">
 
-<div id="intro">
-<div class="envelope">💌</div>
-<h1>有一份礼物给你</h1>
-<p>准备好打开了吗？</p>
-<button onclick="openCard()">打开我的惊喜</button>
-</div>
-
-<main id="main" class="hidden">
-<div class="container">
-
-<header class="hero">
-<h1 id="title">给我最珍惜的人 ❤️</h1>
-<p class="subtitle">把每一个平凡的日子，都变成值得记住的日子</p>
-<div class="days">
-<div>我们已经一起走过</div>
-<strong id="daysCount">0</strong>
-<div>天</div>
-</div>
-<p id="dateText"></p>
-</header>
-
-<section class="section">
-<h2 class="section-title">📷 我们的回忆</h2>
-<div class="gallery">
-<div class="photo-card">
-<img id="img1" src="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=900&q=85" alt="回忆一" onclick="viewImage(this)">
-<p>第一次心动的瞬间<br>希望时间可以停在这里</p>
-</div>
-<div class="photo-card">
-<img id="img2" src="https://images.unsplash.com/photo-1511988617509-a57c8a288659?auto=format&fit=crop&w=900&q=85" alt="回忆二" onclick="viewImage(this)">
-<p>一起度过的日子<br>每一天都值得珍藏</p>
-</div>
-<div class="photo-card">
-<img id="img3" src="https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&w=900&q=85" alt="回忆三" onclick="viewImage(this)">
-<p>那些温柔的时光<br>是我最珍贵的宝藏</p>
-</div>
-<div class="photo-card">
-<img id="img4" src="https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=900&q=85" alt="回忆四" onclick="viewImage(this)">
-<p>未来还有很长<br>想继续和你一起走</p>
-</div>
-</div>
+<section id="intro">
+  <div class="panel">
+    <div class="heart">💌</div>
+    <h1 id="introTitle">有一份惊喜给你</h1>
+    <p>准备好打开这份心意了吗？</p>
+    <button onclick="openLetter()">打开我的惊喜 ❤️</button>
+    <p><small>一份只属于你的浪漫</small></p>
+  </div>
 </section>
 
-<section class="section">
-<h2 class="section-title">💌 想对你说的话</h2>
-<div class="letter"><div id="letterText"></div></div>
+<section id="main" class="hidden">
+  <div class="letter">
+    <h1 id="title">亲爱的</h1>
+    <p class="center" id="days"></p>
+    <div class="center">💕 💗 💕</div>
+    <div id="letterText"></div>
+    <p class="center" id="signature"></p>
+  </div>
+
+  <div class="panel">
+    <h2>我们的回忆 📷</h2>
+    <div class="photos" id="gallery"></div>
+  </div>
+
+  <div class="panel center">
+    <h2>给你的惊喜 🎁</h2>
+    <p>愿每一天都有爱与温柔陪伴你。</p>
+    <button onclick="surprise()">点击领取惊喜 ❤️</button>
+    <p id="surpriseText"></p>
+  </div>
+
+  <div class="panel center">
+    <button onclick="toggleMusic()">🎵 播放 / 暂停音乐</button>
+    <button onclick="showEditor()">✏️ 制作 / 修改情书</button>
+  </div>
 </section>
 
-<div class="btn-row">
-<button onclick="toggleMusic()" id="musicBtn">🎵 播放音乐</button>
-<button onclick="showSurprise()">🎁 打开隐藏惊喜</button>
-<button onclick="sharePage()">💌 分享这份心意</button>
+<section id="editor" class="panel hidden">
+  <h2>制作你的情书 ❤️</h2>
+  <label>收件人</label>
+  <input id="toInput" placeholder="对方的名字">
+  <label>恋爱日期</label>
+  <input id="dateInput" type="date">
+  <label>情书内容</label>
+  <textarea id="msgInput" placeholder="写下你想说的话..."></textarea>
+  <label>发送人</label>
+  <input id="fromInput" placeholder="你的名字">
+
+  <h2>照片（填写在线图片链接）</h2>
+  <small>可使用公开图片链接。选择本地图片仅用于当前浏览器预览，不会自动上传。</small>
+  <div id="photoInputs"></div>
+
+  <h2>背景音乐 🎵</h2>
+  <label>音乐 MP3 在线链接</label>
+  <input id="musicInput" placeholder="https://...mp3">
+  <button onclick="previewMusic()">试听音乐</button>
+  <button onclick="stopPreview()">停止试听</button>
+
+  <hr>
+  <button onclick="generateLink()">生成分享链接</button>
+  <div id="shareResult" class="center"></div>
+  <button onclick="backToLetter()">返回情书</button>
+</section>
+
+<footer>用心制作 ❤️ 愿爱永远温柔</footer>
 </div>
 
-<div id="surprise">
-<h2>✨ 你是我生活里的小幸运 ✨</h2>
-<p>如果可以，我希望未来的每一个春夏秋冬，都有你在身边。</p>
-<p>谢谢你出现，谢谢你成为我的故事。</p>
-<div style="font-size:40px">❤️ 🌷 💖</div>
+<div id="viewer" class="hidden" onclick="this.classList.add('hidden')">
+<img id="viewImage" alt="照片预览">
 </div>
 
-<footer>
-<p id="signature">愿所有美好，都与你有关。</p>
-<p>Made with ❤️</p>
-</footer>
-</div>
-</main>
-
-<div id="viewer" onclick="closeViewer()">
-<span>×</span>
-<img id="largeImage" src="" alt="放大照片">
-</div>
-
-<audio id="music" loop preload="none">
-<source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
-</audio>
+<audio id="music" loop></audio>
 
 <script>
-// ===== URL 个性化参数 =====
-const params = new URLSearchParams(location.search);
+const params=new URLSearchParams(location.search);
+const defaultMsg="遇见你是我最幸运的事。\\n\\n感谢你出现在我的生命里，让平凡的日子有了光。\\n愿未来的每一天，我们都能牵着彼此的手，去看更多风景。\\n\\n我爱你，今天、明天、以及往后的每一天。";
+let photos=["","","",""];
+let localPreview=[null,null,null,null];
+let musicUrl="";
+let previewAudio=new Audio();
+previewAudio.loop=true;
 
-const recipient = params.get("to") || "我最珍惜的人";
-const anniversaryDate = params.get("date") || "2024-05-20";
-const customMessage = params.get("msg") || "";
-const sender = params.get("from") || "";
-
-document.getElementById("title").textContent = "给" + recipient + " ❤️";
-
-if(sender){
-  document.getElementById("signature").textContent =
-    "爱你的 " + sender;
+function getParam(key,def=""){return params.get(key)||def}
+function safeText(v){return v}
+function updateGallery(){
+ const gallery=document.getElementById("gallery");
+ gallery.innerHTML="";
+ for(let i=0;i<4;i++){
+   let img=document.createElement("img");
+   img.src=localPreview[i]||photos[i]||placeholder(i);
+   img.alt="我们的回忆";
+   img.onclick=()=>showImage(img.src);
+   img.onerror=()=>{img.src=placeholder(i)};
+   gallery.appendChild(img);
+ }
 }
-
-// 自定义照片链接（可选）
-["p1","p2","p3","p4"].forEach((key,index)=>{
-  const url=params.get(key);
-  if(url){
-    document.getElementById("img"+(index+1)).src=url;
-  }
-});
-
-// 默认情书
-const defaultLetter = `谢谢你来到我的世界。
-
-生活有时很普通，
-但因为有你，
-一些小小的日常也变得闪闪发光。
-
-我喜欢和你分享生活，
-喜欢一起吃饭、散步、聊天，
-也喜欢那些什么都不做，
-却觉得很安心的时刻。
-
-未来的日子还很长，
-希望我们继续认真生活，
-认真爱彼此。
-
-愿每一次回忆都温柔，
-愿每一次相遇都值得。
-
-我爱你 ❤️`;
-
-const letterContent = customMessage || defaultLetter;
-
-// ===== 功能代码 =====
-const music = document.getElementById("music");
-let musicPlaying = false;
-
-function openCard(){
-  document.getElementById("intro").style.display="none";
-  document.getElementById("main").classList.remove("hidden");
-  updateDays();
-  typeLetter();
+function placeholder(i){
+ return "https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=800&q=80";
 }
-
+function showImage(src){
+ document.getElementById("viewImage").src=src;
+ document.getElementById("viewer").classList.remove("hidden");
+}
+function openLetter(){
+ document.getElementById("intro").classList.add("hidden");
+ document.getElementById("main").classList.remove("hidden");
+ document.getElementById("editor").classList.add("hidden");
+ typeLetter();
+ updateDays();
+ if(musicUrl){
+  document.getElementById("music").src=musicUrl;
+  document.getElementById("music").play().catch(()=>{});
+ }
+}
 function updateDays(){
-  const start = new Date(anniversaryDate+"T00:00:00");
-  const today = new Date();
-  const days = Math.floor((today-start)/86400000);
-  document.getElementById("daysCount").textContent=Math.max(days,0);
-  document.getElementById("dateText").textContent="纪念日："+anniversaryDate;
+ let date=getParam("date");
+ if(!date){document.getElementById("days").textContent="";return}
+ let start=new Date(date+"T00:00:00");
+ if(isNaN(start)){document.getElementById("days").textContent="";return}
+ let now=new Date();
+ let days=Math.max(0,Math.floor((now-start)/86400000));
+ document.getElementById("days").textContent="我们已经一起走过 "+days+" 天 ❤️";
 }
-
 function typeLetter(){
-  const el=document.getElementById("letterText");
-  el.textContent="";
-  let i=0;
-  function type(){
-    if(i<letterContent.length){
-      el.textContent+=letterContent.charAt(i);
-      i++;
-      setTimeout(type,35);
-    }
-  }
-  type();
+ let msg=getParam("msg",defaultMsg);
+ const el=document.getElementById("letterText");
+ el.textContent=msg;
 }
-
-async function toggleMusic(){
-  if(!musicPlaying){
-    try{
-      await music.play();
-      musicPlaying=true;
-      document.getElementById("musicBtn").textContent="🎵 暂停音乐";
-    }catch(e){
-      alert("音乐加载失败，请稍后再试。");
-    }
-  }else{
-    music.pause();
-    musicPlaying=false;
-    document.getElementById("musicBtn").textContent="🎵 播放音乐";
-  }
+function toggleMusic(){
+ const audio=document.getElementById("music");
+ if(!audio.src && musicUrl)audio.src=musicUrl;
+ if(audio.paused)audio.play().catch(()=>alert("请先在制作页面填写音乐链接。"));
+ else audio.pause();
 }
-
-function showSurprise(){
-  const box=document.getElementById("surprise");
-  box.style.display="block";
-  box.scrollIntoView({behavior:"smooth"});
-  createHearts();
+function surprise(){
+ document.getElementById("surpriseText").innerHTML="❤️ "+["你是我最珍贵的礼物。","愿你每天都被爱包围。","我想和你一起慢慢变老。","遇见你，是我的幸运。"][Math.floor(Math.random()*4)]+" ❤️";
 }
-
-function viewImage(img){
-  document.getElementById("largeImage").src=img.src;
-  document.getElementById("viewer").style.display="flex";
+function showEditor(){
+ document.getElementById("main").classList.add("hidden");
+ document.getElementById("editor").classList.remove("hidden");
+ document.getElementById("intro").classList.add("hidden");
+ fillEditor();
 }
-
-function closeViewer(){
-  document.getElementById("viewer").style.display="none";
+function fillEditor(){
+ document.getElementById("toInput").value=getParam("to");
+ document.getElementById("dateInput").value=getParam("date");
+ document.getElementById("msgInput").value=getParam("msg",defaultMsg);
+ document.getElementById("fromInput").value=getParam("from","你的爱人");
+ document.getElementById("musicInput").value=musicUrl;
+ let phtml="";
+ for(let i=0;i<4;i++){
+  phtml+=`<label>照片 ${i+1} 在线链接</label>
+  <input id="p${i}" value="${photos[i]}" placeholder="图片链接 https://...">
+  <input type="file" accept="image/*" onchange="localPhoto(${i},this)">`;
+ }
+ document.getElementById("photoInputs").innerHTML=phtml;
 }
-
-async function sharePage(){
-  const url=location.href;
-  try{
-    if(navigator.share){
-      await navigator.share({
-        title:"给你的浪漫",
-        text:"有一份浪漫的礼物想分享给你",
-        url:url
-      });
-    }else{
-      await navigator.clipboard.writeText(url);
-      alert("网页链接已复制，可以分享给朋友啦！");
-    }
-  }catch(e){
-    if(e.name!=="AbortError"){
-      alert("分享失败，请手动复制网页链接。");
-    }
-  }
+function localPhoto(i,input){
+ if(input.files&&input.files[0]){
+  localPreview[i]=URL.createObjectURL(input.files[0]);
+  alert("本地预览已载入，但此图片不会进入分享链接。若要分享，请使用在线图片链接。");
+ }
 }
-
-function createHearts(){
-  for(let i=0;i<18;i++){
-    const heart=document.createElement("div");
-    heart.className="heart";
-    heart.textContent=["❤️","💕","💗","💖","🌸"][Math.floor(Math.random()*5)];
-    heart.style.left=Math.random()*100+"vw";
-    heart.style.fontSize=(18+Math.random()*20)+"px";
-    heart.style.animationDuration=(4+Math.random()*4)+"s";
-    document.body.appendChild(heart);
-    setTimeout(()=>heart.remove(),8000);
-  }
+function previewMusic(){
+ let url=document.getElementById("musicInput").value.trim();
+ if(!url){alert("请填写音乐链接");return}
+ previewAudio.src=url;
+ previewAudio.play().catch(()=>alert("音乐无法播放，请检查链接是否为可播放的 MP3 地址。"));
 }
+function stopPreview(){previewAudio.pause();previewAudio.currentTime=0}
+function backToLetter(){
+ stopPreview();
+ document.getElementById("editor").classList.add("hidden");
+ document.getElementById("main").classList.remove("hidden");
+}
+function generateLink(){
+ stopPreview();
+ let to=document.getElementById("toInput").value.trim();
+ let date=document.getElementById("dateInput").value;
+ let msg=document.getElementById("msgInput").value;
+ let from=document.getElementById("fromInput").value.trim();
+ let music=document.getElementById("musicInput").value.trim();
+ let p=[];
+ for(let i=0;i<4;i++)p[i]=document.getElementById("p"+i).value.trim();
 
-document.addEventListener("keydown",e=>{
-  if(e.key==="Escape")closeViewer();
-});
+ let url=new URL(location.href.split("?")[0]);
+ if(to)url.searchParams.set("to",to);
+ if(date)url.searchParams.set("date",date);
+ if(msg)url.searchParams.set("msg",msg);
+ if(from)url.searchParams.set("from",from);
+ if(music)url.searchParams.set("music",music);
+ for(let i=0;i<4;i++)if(p[i])url.searchParams.set("p"+(i+1),p[i]);
+
+ let link=url.toString();
+ document.getElementById("shareResult").innerHTML=
+ `<p>你的分享链接已生成：</p>
+ <textarea id="shareLink" readonly>${link}</textarea>
+ <button onclick="copyLink()">复制链接</button>
+ <p>二维码</p>
+ <img id="qr" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(link)}" alt="分享二维码">
+ <p><small>如果链接过长，部分平台可能无法完整分享。</small></p>`;
+}
+function copyLink(){
+ let input=document.getElementById("shareLink");
+ input.select();
+ if(navigator.clipboard){
+  navigator.clipboard.writeText(input.value).then(()=>alert("链接已复制！")).catch(()=>fallbackCopy(input));
+ }else fallbackCopy(input);
+}
+function fallbackCopy(input){
+ try{document.execCommand("copy");alert("链接已复制！")}catch(e){alert("请手动复制链接")}
+}
+function loadFromParams(){
+ document.getElementById("title").textContent="亲爱的 "+getParam("to","你")+" ❤️";
+ document.getElementById("introTitle").textContent="有一份惊喜给 "+getParam("to","你");
+ document.getElementById("signature").textContent="—— "+getParam("from","你的爱人");
+ for(let i=0;i<4;i++)photos[i]=getParam("p"+(i+1),"");
+ musicUrl=getParam("music","");
+ if(musicUrl)document.getElementById("music").src=musicUrl;
+ updateGallery();
+}
+loadFromParams();
 </script>
 </body>
 </html>
