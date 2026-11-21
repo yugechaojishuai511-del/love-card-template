@@ -7,194 +7,145 @@
 <title>给你的浪漫</title>
 <style>
 *{box-sizing:border-box}
-body{
-  margin:0;color:#634b50;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;
-  background:linear-gradient(135deg,#fff5f5,#fce8ed,#fff8ef);
-  overflow-x:hidden;
-}
-button{
-  cursor:pointer;border:none;border-radius:30px;
-  padding:13px 24px;background:#d87891;color:white;
-  font-size:15px;transition:.3s;
-}
+body{margin:0;color:#634b50;font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:linear-gradient(135deg,#fff5f5,#fce8ed,#fff8ef);overflow-x:hidden}
+button{cursor:pointer;border:none;border-radius:30px;padding:13px 24px;background:#d87891;color:white;font-size:15px;transition:.3s}
 button:hover{transform:translateY(-2px);opacity:.9}
 h1,h2{font-weight:500}
 .container{max-width:900px;margin:auto;padding:30px 20px}
-.center{text-align:center}
 .hidden{display:none!important}
-#intro{
-  position:fixed;inset:0;z-index:10;
-  display:flex;justify-content:center;align-items:center;
-  flex-direction:column;text-align:center;
-  background:linear-gradient(135deg,#ffe6ec,#fff5f0);
-}
+#intro{position:fixed;inset:0;z-index:10;display:flex;justify-content:center;align-items:center;flex-direction:column;text-align:center;background:linear-gradient(135deg,#ffe6ec,#fff5f0)}
 .envelope{font-size:90px;animation:float 2s infinite ease-in-out}
 @keyframes float{50%{transform:translateY(-12px)}}
 .hero{padding:55px 0 30px;text-align:center}
 .hero h1{font-size:35px;color:#c96d88}
 .subtitle{color:#a9848c}
-.days{
-  display:inline-block;padding:22px 35px;margin:25px 0;
-  border-radius:25px;background:#fff9f5;
-  box-shadow:0 8px 30px #e9c7ce55;
-}
+.days{display:inline-block;padding:22px 35px;margin:25px 0;border-radius:25px;background:#fff9f5;box-shadow:0 8px 30px #e9c7ce55}
 .days strong{font-size:40px;color:#d87891}
 .section{margin:40px 0}
 .section-title{text-align:center;color:#c96d88;margin-bottom:25px}
-.gallery{
-  display:grid;grid-template-columns:repeat(2,1fr);
-  gap:18px;
-}
-.photo-card{
-  background:white;padding:12px;border-radius:20px;
-  box-shadow:0 8px 25px #e8c8ce55;
-}
-.photo-card img{
-  width:100%;height:280px;object-fit:cover;
-  border-radius:14px;cursor:pointer;
-}
+.gallery{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.photo-card{background:white;padding:12px;border-radius:20px;box-shadow:0 8px 25px #e8c8ce55}
+.photo-card img{width:100%;height:280px;object-fit:cover;border-radius:14px;cursor:pointer}
 .photo-card p{text-align:center;line-height:1.8;margin:12px 5px}
-.letter{
-  background:#fffaf5;border-radius:24px;padding:30px;
-  line-height:2.2;white-space:pre-line;
-  box-shadow:0 8px 25px #e8c8ce44;
-}
+.letter{background:#fffaf5;border-radius:24px;padding:30px;line-height:2.2;white-space:pre-line;box-shadow:0 8px 25px #e8c8ce44}
 #letterText{min-height:120px}
-.btn-row{
-  display:flex;flex-wrap:wrap;justify-content:center;
-  gap:12px;margin:25px 0;
-}
-#surprise{
-  display:none;background:#fff0f5;padding:30px;
-  border-radius:25px;text-align:center;
-  line-height:2;margin:25px 0;
-}
+.btn-row{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin:25px 0}
+#surprise{display:none;background:#fff0f5;padding:30px;border-radius:25px;text-align:center;line-height:2;margin:25px 0}
 footer{text-align:center;padding:40px;color:#b38a94}
-#viewer{
-  position:fixed;inset:0;z-index:20;
-  background:#000d;display:none;
-  justify-content:center;align-items:center;padding:20px;
-}
+#viewer{position:fixed;inset:0;z-index:20;background:#000d;display:none;justify-content:center;align-items:center;padding:20px}
 #viewer img{max-width:100%;max-height:85vh;border-radius:15px}
-#viewer span{
-  position:absolute;top:20px;right:25px;color:white;
-  font-size:35px;cursor:pointer;
-}
-.heart{
-  position:fixed;bottom:-30px;pointer-events:none;
-  animation:rise 6s linear forwards;z-index:2;
-}
-@keyframes rise{
-  to{transform:translateY(-110vh);opacity:0}
-}
-@media(max-width:600px){
-  .container{padding:20px 15px}
-  .hero h1{font-size:28px}
-  .gallery{grid-template-columns:1fr}
-  .photo-card img{height:260px}
-  .letter{padding:22px}
-}
-@media(prefers-reduced-motion:reduce){
-  *,*::before,*::after{animation:none!important;transition:none!important}
-}
+#viewer span{position:absolute;top:20px;right:25px;color:white;font-size:35px;cursor:pointer}
+.heart{position:fixed;bottom:-30px;pointer-events:none;animation:rise 6s linear forwards;z-index:2}
+@keyframes rise{to{transform:translateY(-110vh);opacity:0}}
+@media(max-width:600px){.container{padding:20px 15px}.hero h1{font-size:28px}.gallery{grid-template-columns:1fr}.photo-card img{height:260px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
 
 <div id="intro">
-  <div class="envelope">💌</div>
-  <h1>有一份礼物给你</h1>
-  <p>准备好打开了吗？</p>
-  <button onclick="openCard()">打开我的惊喜</button>
+<div class="envelope">💌</div>
+<h1>有一份礼物给你</h1>
+<p>准备好打开了吗？</p>
+<button onclick="openCard()">打开我的惊喜</button>
 </div>
 
 <main id="main" class="hidden">
 <div class="container">
 
 <header class="hero">
-  <h1>给我最珍惜的人 ❤️</h1>
-  <p class="subtitle">把每一个平凡的日子，都变成值得记住的日子</p>
-  <div class="days">
-    <div>我们已经一起走过</div>
-    <strong id="daysCount">0</strong>
-    <div>天</div>
-  </div>
-  <p id="dateText"></p>
+<h1 id="title">给我最珍惜的人 ❤️</h1>
+<p class="subtitle">把每一个平凡的日子，都变成值得记住的日子</p>
+<div class="days">
+<div>我们已经一起走过</div>
+<strong id="daysCount">0</strong>
+<div>天</div>
+</div>
+<p id="dateText"></p>
 </header>
 
 <section class="section">
-  <h2 class="section-title">📷 我们的回忆</h2>
-  <div class="gallery">
-
-    <div class="photo-card">
-      <img src="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=900&q=85" alt="美好回忆一" onclick="viewImage(this)">
-      <p>第一次心动的瞬间<br>希望时间可以停在这里</p>
-    </div>
-
-    <div class="photo-card">
-      <img src="https://images.unsplash.com/photo-1511988617509-a57c8a288659?auto=format&fit=crop&w=900&q=85" alt="美好回忆二" onclick="viewImage(this)">
-      <p>一起度过的日子<br>每一天都值得珍藏</p>
-    </div>
-
-    <div class="photo-card">
-      <img src="https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&w=900&q=85" alt="美好回忆三" onclick="viewImage(this)">
-      <p>那些温柔的时光<br>是我最珍贵的宝藏</p>
-    </div>
-
-    <div class="photo-card">
-      <img src="https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=900&q=85" alt="美好回忆四" onclick="viewImage(this)">
-      <p>未来还有很长<br>想继续和你一起走</p>
-    </div>
-
-  </div>
+<h2 class="section-title">📷 我们的回忆</h2>
+<div class="gallery">
+<div class="photo-card">
+<img id="img1" src="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=900&q=85" alt="回忆一" onclick="viewImage(this)">
+<p>第一次心动的瞬间<br>希望时间可以停在这里</p>
+</div>
+<div class="photo-card">
+<img id="img2" src="https://images.unsplash.com/photo-1511988617509-a57c8a288659?auto=format&fit=crop&w=900&q=85" alt="回忆二" onclick="viewImage(this)">
+<p>一起度过的日子<br>每一天都值得珍藏</p>
+</div>
+<div class="photo-card">
+<img id="img3" src="https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&w=900&q=85" alt="回忆三" onclick="viewImage(this)">
+<p>那些温柔的时光<br>是我最珍贵的宝藏</p>
+</div>
+<div class="photo-card">
+<img id="img4" src="https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=900&q=85" alt="回忆四" onclick="viewImage(this)">
+<p>未来还有很长<br>想继续和你一起走</p>
+</div>
+</div>
 </section>
 
 <section class="section">
-  <h2 class="section-title">💌 想对你说的话</h2>
-  <div class="letter">
-    <div id="letterText"></div>
-  </div>
+<h2 class="section-title">💌 想对你说的话</h2>
+<div class="letter"><div id="letterText"></div></div>
 </section>
 
 <div class="btn-row">
-  <button onclick="toggleMusic()" id="musicBtn">🎵 播放音乐</button>
-  <button onclick="showSurprise()">🎁 打开隐藏惊喜</button>
-  <button onclick="sharePage()">💌 分享这份心意</button>
+<button onclick="toggleMusic()" id="musicBtn">🎵 播放音乐</button>
+<button onclick="showSurprise()">🎁 打开隐藏惊喜</button>
+<button onclick="sharePage()">💌 分享这份心意</button>
 </div>
 
 <div id="surprise">
-  <h2>✨ 你是我生活里的小幸运 ✨</h2>
-  <p>如果可以，我希望未来的每一个春夏秋冬，都有你在身边。</p>
-  <p>谢谢你出现，谢谢你成为我的故事。</p>
-  <div style="font-size:40px">❤️ 🌷 💖</div>
+<h2>✨ 你是我生活里的小幸运 ✨</h2>
+<p>如果可以，我希望未来的每一个春夏秋冬，都有你在身边。</p>
+<p>谢谢你出现，谢谢你成为我的故事。</p>
+<div style="font-size:40px">❤️ 🌷 💖</div>
 </div>
 
 <footer>
-  <p>愿所有美好，都与你有关。</p>
-  <p>Made with ❤️</p>
+<p id="signature">愿所有美好，都与你有关。</p>
+<p>Made with ❤️</p>
 </footer>
-
 </div>
 </main>
 
 <div id="viewer" onclick="closeViewer()">
-  <span>×</span>
-  <img id="largeImage" src="" alt="放大照片">
+<span>×</span>
+<img id="largeImage" src="" alt="放大照片">
 </div>
 
 <audio id="music" loop preload="none">
-  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+<source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
 </audio>
 
 <script>
-// ====== 可定制区域 ======
+// ===== URL 个性化参数 =====
+const params = new URLSearchParams(location.search);
 
-// 修改这里：纪念日
-const anniversaryDate = "2024-05-20";
+const recipient = params.get("to") || "我最珍惜的人";
+const anniversaryDate = params.get("date") || "2024-05-20";
+const customMessage = params.get("msg") || "";
+const sender = params.get("from") || "";
 
-// 修改这里：情书内容
-const letterContent = `谢谢你来到我的世界。
+document.getElementById("title").textContent = "给" + recipient + " ❤️";
+
+if(sender){
+  document.getElementById("signature").textContent =
+    "爱你的 " + sender;
+}
+
+// 自定义照片链接（可选）
+["p1","p2","p3","p4"].forEach((key,index)=>{
+  const url=params.get(key);
+  if(url){
+    document.getElementById("img"+(index+1)).src=url;
+  }
+});
+
+// 默认情书
+const defaultLetter = `谢谢你来到我的世界。
 
 生活有时很普通，
 但因为有你，
@@ -214,8 +165,9 @@ const letterContent = `谢谢你来到我的世界。
 
 我爱你 ❤️`;
 
-// ====== 功能代码 ======
+const letterContent = customMessage || defaultLetter;
 
+// ===== 功能代码 =====
 const music = document.getElementById("music");
 let musicPlaying = false;
 
@@ -231,8 +183,7 @@ function updateDays(){
   const today = new Date();
   const days = Math.floor((today-start)/86400000);
   document.getElementById("daysCount").textContent=Math.max(days,0);
-  document.getElementById("dateText").textContent=
-    "纪念日："+anniversaryDate;
+  document.getElementById("dateText").textContent="纪念日："+anniversaryDate;
 }
 
 function typeLetter(){
@@ -243,7 +194,7 @@ function typeLetter(){
     if(i<letterContent.length){
       el.textContent+=letterContent.charAt(i);
       i++;
-      setTimeout(type,45);
+      setTimeout(type,35);
     }
   }
   type();
@@ -314,7 +265,6 @@ function createHearts(){
   }
 }
 
-// 点击页面关闭放大图片
 document.addEventListener("keydown",e=>{
   if(e.key==="Escape")closeViewer();
 });
