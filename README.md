@@ -4,250 +4,148 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>给你的一封情书</title>
+<title>给你的一封信</title>
 <style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
-  background: #fff5f7;
-  color: #754452;
-  overflow-x: hidden;
+*{box-sizing:border-box}
+body{
+  margin:0;min-height:100vh;
+  font-family:"PingFang SC","Microsoft YaHei",sans-serif;
+  color:#633d4d;
+  background:linear-gradient(145deg,#fff0f4,#fce4ec,#fff5e8);
+  display:flex;justify-content:center;align-items:center;
+  padding:24px;overflow-x:hidden
 }
-.page {
-  min-height: 100vh;
-  padding: 30px 20px 60px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  position: relative;
+.wrap{width:100%;max-width:440px;text-align:center}
+.cover{
+  position:fixed;inset:0;z-index:5;
+  display:flex;align-items:center;justify-content:center;
+  flex-direction:column;
+  background:linear-gradient(135deg,#f9dce8,#fff1e7);
+  transition:opacity .8s,visibility .8s;
+  padding:24px
 }
-.intro {
-  position: fixed;
-  inset: 0;
-  z-index: 10;
-  background: linear-gradient(145deg,#f8dce6,#fff4f4,#f5d4df);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  transition: opacity .8s, transform .8s;
+.cover.hide{opacity:0;visibility:hidden}
+.envelope{font-size:100px;animation:bob 2s infinite ease-in-out}
+.cover h1{font-size:28px;color:#a64d70}
+.cover p{color:#8b6273}
+button{
+  border:0;padding:14px 25px;border-radius:30px;
+  background:#c76a8b;color:white;font-size:16px;
+  box-shadow:0 6px 20px #c76a8b40;
+  cursor:pointer;transition:.2s
 }
-.intro.hide {
-  opacity: 0;
-  pointer-events: none;
-  transform: scale(1.08);
+button:hover{transform:translateY(-2px)}
+.card{
+  background:#fffdfb;border-radius:26px;padding:28px 23px;
+  box-shadow:0 20px 60px #ad6c8330;
+  border:1px solid #fff;position:relative
 }
-.envelope {
-  width: 240px;
-  height: 155px;
-  position: relative;
-  cursor: pointer;
-  margin: 30px;
-  background: #eaa9bf;
-  border-radius: 12px;
-  box-shadow: 0 15px 40px #c47b9580;
+.tag{font-size:12px;letter-spacing:4px;color:#c27b95}
+h2{font-size:30px;color:#b65c7d;margin:14px 0}
+.photo{
+  width:100%;height:280px;border-radius:18px;
+  background:#f6e2e9;overflow:hidden;margin:20px 0;
+  display:flex;align-items:center;justify-content:center
 }
-.envelope:before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  border-left: 120px solid transparent;
-  border-right: 120px solid transparent;
-  border-top: 90px solid #f4c4d4;
-  z-index: 2;
+.photo img{width:100%;height:100%;object-fit:cover}
+.photo .placeholder{padding:20px;color:#a97589}
+.message{line-height:2;font-size:16px;text-align:left}
+.signature{color:#bc6785;text-align:right;margin-top:20px}
+.surprise{
+  display:none;margin-top:20px;padding:20px;
+  background:#fff0f5;border-radius:18px;line-height:2;
+  animation:fade .5s
 }
-.envelope:after {
-  content: "♥";
-  position: absolute;
-  left: 50%;
-  top: 53%;
-  transform: translate(-50%,-50%);
-  color: white;
-  font-size: 35px;
-  z-index: 3;
+.surprise.show{display:block}
+.btn{margin-top:20px}
+.foot{font-size:12px;color:#b18b9b;margin-top:20px}
+.heart{
+  position:fixed;pointer-events:none;z-index:4;
+  animation:float 5s linear forwards;opacity:.7
 }
-.intro h1 {
-  font-size: 28px;
-  color: #a34f6c;
-  margin-bottom: 12px;
+@keyframes bob{50%{transform:translateY(-12px)}}
+@keyframes float{
+  0%{transform:translateY(0) rotate(0);opacity:0}
+  10%{opacity:.8}
+  100%{transform:translateY(-100vh) rotate(30deg);opacity:0}
 }
-.intro p { color: #a36b7f; }
-.open-btn {
-  border: none;
-  background: #b85e7d;
-  color: white;
-  padding: 14px 30px;
-  border-radius: 30px;
-  margin-top: 20px;
-  font-size: 16px;
-  box-shadow: 0 5px 20px #b85e7d55;
-  cursor: pointer;
-}
-.card {
-  max-width: 430px;
-  width: 100%;
-  border-radius: 26px;
-  padding: 30px 22px;
-  background: rgba(255,255,255,.85);
-  box-shadow: 0 10px 45px #b8788b22;
-  text-align: center;
-  position: relative;
-}
-.tag {
-  letter-spacing: 4px;
-  font-size: 12px;
-  color: #bc8295;
-}
-h2 {
-  font-size: 30px;
-  margin: 18px 0;
-  color: #a14f6d;
-}
-.message {
-  line-height: 2;
-  color: #815568;
-  font-size: 16px;
-}
-.photo {
-  width: 100%;
-  height: 260px;
-  margin: 24px 0;
-  border-radius: 20px;
-  background: linear-gradient(145deg,#f5d8e2,#eec4d5,#f9e8eb);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  overflow: hidden;
-  color: #9c5d75;
-}
-.photo span { font-size: 50px; }
-.photo small { margin-top: 10px; }
-.divider {
-  width: 60px;
-  height: 2px;
-  background: #edc0d0;
-  margin: 22px auto;
-}
-.love {
-  font-size: 35px;
-  animation: beat 1.3s infinite;
-}
-.btn {
-  border: none;
-  background: #c46c89;
-  color: white;
-  border-radius: 30px;
-  padding: 13px 24px;
-  font-size: 15px;
-  margin-top: 20px;
-  cursor: pointer;
-}
-.hidden { display: none; }
-.surprise {
-  margin-top: 22px;
-  line-height: 2;
-  color: #b25477;
-  animation: fade .8s;
-}
-.floating {
-  position: fixed;
-  pointer-events: none;
-  bottom: -30px;
-  animation: floatUp linear forwards;
-  z-index: 1;
-}
-footer {
-  margin-top: 25px;
-  font-size: 12px;
-  color: #b58b9b;
-}
-@keyframes beat {
-  50% { transform: scale(1.18); }
-}
-@keyframes floatUp {
-  to { transform: translateY(-110vh) rotate(30deg); opacity: 0; }
-}
-@keyframes fade {
-  from { opacity: 0; transform: translateY(15px); }
-  to { opacity: 1; transform: translateY(0); }
+@keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@media(max-width:480px){
+  body{padding:14px}
+  .card{padding:22px 18px}
+  .photo{height:260px}
 }
 </style>
 </head>
 <body>
-
-<div class="intro" id="intro">
-  <h1>有一份小小的惊喜</h1>
-  <p>我想把一些温柔送给你</p>
-  <div class="envelope" onclick="openCard()"></div>
-  <button class="open-btn" onclick="openCard()">点击打开信件</button>
-  <p style="margin-top:25px;font-size:13px;">♡ 给特别的你 ♡</p>
+<div class="cover" id="cover">
+  <div class="envelope">💌</div>
+  <h1>有一封信，想送给你</h1>
+  <p>准备好了吗？</p>
+  <button onclick="openLetter()">打开信件 ✨</button>
 </div>
 
-<div class="page">
-  <main class="card">
-    <div class="tag">A LITTLE LOVE LETTER</div>
-    <div class="love">💗</div>
-    <h2>生日快乐</h2>
+<div class="wrap">
+  <div class="card">
+    <div class="tag">A LETTER FOR YOU</div>
+    <h2>生日快乐 🎂</h2>
+    <p>愿今天的你，被温柔包围</p>
 
-    <p class="message">
-      在这个特别的日子，<br>
-      想把最温柔的祝福送给你。<br>
-      愿你所遇皆美好，<br>
-      所想皆如愿。
-    </p>
-
-    <div class="photo">
-      <span>🌷</span>
-      <small>这里是属于你们的照片位置</small>
+    <div class="photo" id="photo">
+      <div class="placeholder">
+        <div style="font-size:50px">📷</div>
+        <p>未来这里放上你们的照片</p>
+      </div>
     </div>
 
-    <div class="divider"></div>
-
-    <p class="message">
-      愿你被世界温柔以待，<br>
-      愿每一个平凡的日子<br>
-      都有值得期待的小惊喜。
-    </p>
-
-    <button class="btn" onclick="showSurprise()">还有一份惊喜 ✨</button>
-
-    <div class="surprise hidden" id="surprise">
-      <h3>💌 想对你说</h3>
+    <div class="message">
+      <p>亲爱的：</p>
       <p>
-        你值得所有美好。<br>
-        愿快乐永远陪伴你，<br>
-        愿未来的每一天都闪闪发光。
+        今天是属于你的日子。<br>
+        愿你在新的一岁里，<br>
+        有勇气追逐喜欢的生活，<br>
+        有温柔拥抱每一个平凡的日子。
       </p>
-      <p>♡ 爱与祝福 ♡</p>
+      <p>
+        愿所有美好如期而至，<br>
+        愿你的笑容永远灿烂。
+      </p>
     </div>
-    <footer>Made with love ♡</footer>
-  </main>
+
+    <div class="signature">—— 一个想给你惊喜的人</div>
+
+    <button class="btn" onclick="toggleSurprise()">还有一份惊喜 ✨</button>
+
+    <div class="surprise" id="surprise">
+      <h3>💗 偷偷告诉你</h3>
+      <p>遇见你，是生活送给我的一份礼物。</p>
+      <p>希望未来的每一天，我们都能创造更多值得珍藏的回忆。</p>
+      <p style="font-size:28px">🌷💕🌷</p>
+    </div>
+  </div>
+  <div class="foot">Made with ♥ · 一份可以珍藏的心意</div>
 </div>
 
 <script>
-function openCard() {
-  document.getElementById("intro").classList.add("hide");
+function openLetter(){
+  document.getElementById('cover').classList.add('hide');
+  createHearts();
 }
-
-function showSurprise() {
-  const el = document.getElementById("surprise");
-  el.classList.toggle("hidden");
+function toggleSurprise(){
+  document.getElementById('surprise').classList.toggle('show');
 }
-
-function createHeart() {
-  const h = document.createElement("div");
-  h.className = "floating";
-  h.innerHTML = ["💗","💕","🌸","♡","✨"][Math.floor(Math.random()*5)];
-  h.style.left = Math.random()*100+"vw";
-  h.style.animationDuration = (5+Math.random()*5)+"s";
-  h.style.fontSize = (16+Math.random()*20)+"px";
-  document.body.appendChild(h);
-  setTimeout(()=>h.remove(),10000);
+function createHearts(){
+  setInterval(()=>{
+    const h=document.createElement('div');
+    h.className='heart';
+    h.innerHTML=['💗','💕','🌸','✨','💖'][Math.floor(Math.random()*5)];
+    h.style.left=Math.random()*100+'vw';
+    h.style.bottom='-30px';
+    h.style.fontSize=(16+Math.random()*20)+'px';
+    document.body.appendChild(h);
+    setTimeout(()=>h.remove(),5000);
+  },700);
 }
-setInterval(createHeart,800);
 </script>
 </body>
 </html>
