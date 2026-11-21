@@ -3,279 +3,146 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>给你的一封情书</title>
 <style>
 *{box-sizing:border-box}
-body{
- margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
- background:linear-gradient(135deg,#ffe0e8,#fff4ee);
- color:#5d3846;text-align:center;
-}
-button,input,textarea{font:inherit}
-button{
- border:0;border-radius:25px;padding:12px 22px;
- background:#e97898;color:white;cursor:pointer;margin:6px;
-}
-button:hover{opacity:.85}
-.container{max-width:850px;margin:auto;padding:22px}
-.card{
- background:rgba(255,255,255,.9);border-radius:22px;
- padding:25px;margin:20px 0;box-shadow:0 5px 25px #e5b7c455;
-}
-h1{color:#d65c81}
-input,textarea{
- width:100%;padding:12px;margin:8px 0;border:1px solid #f0c5d2;
- border-radius:12px;background:white;color:#543746;
-}
-textarea{min-height:110px;resize:vertical}
-.hidden{display:none}
-.photo-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.photo-box{background:#fff0f4;border-radius:15px;padding:10px}
-.photo-box img{width:100%;height:220px;object-fit:cover;border-radius:12px}
-.photo-box input[type=file]{font-size:12px}
-#letter{white-space:pre-wrap;line-height:2;text-align:left}
-#surprise{font-size:25px;color:#e55e88}
-#qr img{width:200px;max-width:100%;margin:10px}
-.heart{font-size:28px;animation:beat 1s infinite}
-@keyframes beat{50%{transform:scale(1.3)}}
-@media(max-width:600px){
- .container{padding:10px}
- .card{padding:18px}
- .photo-grid{grid-template-columns:1fr}
- .photo-box img{height:250px}
-}
+body{margin:0;background:linear-gradient(135deg,#fff0f3,#fce4ec,#fff7f0);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#633b48;min-height:100vh;padding:24px}
+main{max-width:680px;margin:auto;background:#ffffffd9;border-radius:24px;padding:25px;box-shadow:0 10px 40px #0001}
+h1{text-align:center;color:#bd607d}
+p{text-align:center;line-height:1.8}
+input,textarea,button{width:100%;padding:13px;margin:9px 0;border:1px solid #e8cbd5;border-radius:12px;font-size:16px}
+button{background:#d96c8d;color:white;border:0;font-weight:bold;cursor:pointer}
+#photos{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+#photos img{width:100%;border-radius:14px}
+#result{word-break:break-all;margin-top:15px}
+.hide{display:none}
 </style>
 </head>
 <body>
+<main>
+<h1>💕 给你的一封情书 💕</h1>
+<p id="intro">把心意写下来，留给最特别的人。</p>
 
-<div class="container">
-<div id="intro" class="card">
- <div class="heart">❤️</div>
- <h1>一份特别的礼物</h1>
- <p>有些话，我想认真地告诉你。</p>
- <button onclick="openCard()">打开我的心意</button>
+<div id="editor">
+<input id="to" placeholder="写下收信人的名字">
+<input id="from" placeholder="写下你的名字">
+<input id="date" type="date">
+<textarea id="message" rows="6" placeholder="写下你想对TA说的话..."></textarea>
+<label>选择照片（可多选）</label>
+<input id="files" type="file" accept="image/*" multiple>
+<button id="save" onclick="saveCard()">保存并生成分享链接 ❤️</button>
 </div>
 
-<div id="main" class="hidden">
-
-<div class="card">
-<h1 id="title">给你的一封情书</h1>
-<p id="dateText"></p>
-<p class="heart">❤️</p>
-</div>
-
-<div class="card">
-<h2>我们的故事</h2>
+<div id="photos"></div>
 <div id="letter"></div>
-<p id="senderText"></p>
-</div>
-
-<div class="card">
-<h2>我们的照片</h2>
-<div class="photo-grid">
-<div class="photo-box">
-<img id="img1" src="" alt="照片1">
-<input type="file" accept="image/*" onchange="loadPhoto(this,'img1')">
-<input id="p1" placeholder="或输入照片网络链接">
-<button onclick="setPhoto(1)">显示照片</button>
-</div>
-<div class="photo-box">
-<img id="img2" src="" alt="照片2">
-<input type="file" accept="image/*" onchange="loadPhoto(this,'img2')">
-<input id="p2" placeholder="或输入照片网络链接">
-<button onclick="setPhoto(2)">显示照片</button>
-</div>
-<div class="photo-box">
-<img id="img3" src="" alt="照片3">
-<input type="file" accept="image/*" onchange="loadPhoto(this,'img3')">
-<input id="p3" placeholder="或输入照片网络链接">
-<button onclick="setPhoto(3)">显示照片</button>
-</div>
-<div class="photo-box">
-<img id="img4" src="" alt="照片4">
-<input type="file" accept="image/*" onchange="loadPhoto(this,'img4')">
-<input id="p4" placeholder="或输入照片网络链接">
-<button onclick="setPhoto(4)">显示照片</button>
-</div>
-</div>
-</div>
-
-<div class="card">
-<h2>想听一首属于我们的歌吗？</h2>
-<input id="musicUrl" placeholder="粘贴音乐直链">
-<button onclick="playMusic()">播放音乐</button>
-<button onclick="pauseMusic()">暂停音乐</button>
-<audio id="music" controls style="width:100%"></audio>
-<p>请使用可直接播放的音频链接。</p>
-</div>
-
-<div class="card">
-<h2>录下想对你说的话</h2>
-<button onclick="startRecord()">开始录音</button>
-<button onclick="stopRecord()">停止录音</button>
-<button onclick="clearRecord()">重新录音</button>
-<audio id="voice" controls style="width:100%"></audio>
-<p id="recordStatus">录音仅保存在当前设备，暂不支持在线永久保存。</p>
-</div>
-
-<div class="card">
-<h2>一个小惊喜</h2>
-<button onclick="surprise()">点击领取惊喜</button>
-<p id="surprise"></p>
-</div>
-
-<div class="card">
-<h2>生成分享链接</h2>
-<button onclick="makeShare()">生成我们的专属链接</button>
-<textarea id="shareLink" readonly placeholder="生成后这里会出现分享链接"></textarea>
-<button onclick="copyLink()">复制链接</button>
-<div id="qr"></div>
-</div>
-
-<div class="card">
-<h2>爱不会因为距离而消失</h2>
-<p>愿每一次打开，都能感受到爱。</p>
-<div class="heart">❤️</div>
-</div>
-
-</div>
-</div>
+<div id="result"></div>
+</main>
 
 <script>
-const params=new URLSearchParams(location.search);
-let recorder, chunks=[],audioBlob;
+const SUPABASE_URL = "https://cseiuubvjuzostnjymub.supabase.co";
+const SUPABASE_KEY = "sb_publishable_7lKtu0PjfkHA8pkzrj93VA__fBNbfLO";
+const BUCKET = "love-files";
 
-function openCard(){
- document.getElementById('intro').classList.add('hidden');
- document.getElementById('main').classList.remove('hidden');
- init();
+function headers(extra={}) {
+  return { "apikey":SUPABASE_KEY, "Authorization":"Bearer "+SUPABASE_KEY, ...extra };
 }
 
-function init(){
- let to=params.get('to')||'你';
- let from=params.get('from')||'爱你的人';
- let date=params.get('date')||'';
- let msg=params.get('msg')||'遇见你，是我最幸运的事。希望未来的每一天，都能和你一起度过。';
- document.getElementById('title').textContent='给 '+to+' 的情书';
- document.getElementById('dateText').textContent=date?'纪念日：'+date:'';
- document.getElementById('letter').textContent=msg;
- document.getElementById('senderText').textContent='—— '+from;
-
- for(let i=1;i<=4;i++){
-  let u=params.get('p'+i);
-  if(u){
-   document.getElementById('p'+i).value=u;
-   document.getElementById('img'+i).src=u;
-  }
- }
- let m=params.get('music');
- if(m)document.getElementById('musicUrl').value=m;
+function render(data){
+  document.getElementById("editor").classList.add("hide");
+  document.getElementById("intro").textContent="❤️ 一份来自心底的礼物 ❤️";
+  document.getElementById("letter").innerHTML=
+    "<h2 style='text-align:center'>亲爱的 "+esc(data.to)+"</h2>"+
+    "<p>"+esc(data.message).replace(/\n/g,"<br>")+"</p>"+
+    "<p>—— "+esc(data.from)+"</p>"+
+    (data.date ? "<p>"+esc(data.date)+"</p>" : "");
+  document.getElementById("photos").innerHTML=(data.photos||[]).map(url=>
+    '<img src="'+url+'" alt="爱意照片">'
+  ).join("");
 }
 
-function loadPhoto(input,id){
- if(input.files&&input.files[0]){
-  document.getElementById(id).src=URL.createObjectURL(input.files[0]);
- }
+function esc(s){
+  return String(s||"").replace(/[&<>"']/g,c=>({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;',"'":"&#39;"
+  }[c]));
 }
 
-function setPhoto(n){
- let u=document.getElementById('p'+n).value.trim();
- if(u)document.getElementById('img'+n).src=u;
+async function upload(path,file){
+  const response=await fetch(SUPABASE_URL+"/storage/v1/object/"+BUCKET+"/"+path,{
+    method:"POST",
+    headers:headers({"Content-Type":file.type||"application/octet-stream"}),
+    body:file
+  });
+  if(!response.ok)throw new Error("上传失败："+await response.text());
+  return SUPABASE_URL+"/storage/v1/object/public/"+BUCKET+"/"+path;
 }
 
-function playMusic(){
- let u=document.getElementById('musicUrl').value.trim();
- if(!u)return alert('请先输入音乐链接');
- let a=document.getElementById('music');
- if(a.src!==u)a.src=u;
- a.play().catch(()=>alert('无法播放，请检查音乐链接是否有效'));
-}
-function pauseMusic(){
- document.getElementById('music').pause();
-}
-
-async function startRecord(){
- try{
-  let stream=await navigator.mediaDevices.getUserMedia({audio:true});
-  chunks=[];
-  recorder=new MediaRecorder(stream);
-  recorder.ondataavailable=e=>{if(e.data.size)chunks.push(e.data)};
-  recorder.onstop=()=>{
-   audioBlob=new Blob(chunks,{type:recorder.mimeType||'audio/webm'});
-   document.getElementById('voice').src=URL.createObjectURL(audioBlob);
-   document.getElementById('recordStatus').textContent='录音完成，可以试听。录音只保存在当前设备。';
-   stream.getTracks().forEach(t=>t.stop());
-  };
-  recorder.start();
-  document.getElementById('recordStatus').textContent='正在录音...';
- }catch(e){
-  alert('无法使用麦克风，请检查浏览器权限。');
- }
-}
-
-function stopRecord(){
- if(recorder&&recorder.state==='recording')recorder.stop();
-}
-function clearRecord(){
- if(recorder&&recorder.state==='recording')recorder.stop();
- chunks=[];audioBlob=null;
- document.getElementById('voice').removeAttribute('src');
- document.getElementById('recordStatus').textContent='录音已清除，可以重新录制。';
-}
-
-function surprise(){
- let messages=[
- '你是我平凡生活里的光 ❤️',
- '遇见你，是我最幸运的事 💕',
- '未来的日子，我们一起慢慢走 🌹',
- '如果重来一次，我还是会选择你 ❤️',
- '愿我们永远有说不完的话 💗',
- '世界很大，但我只想牵你的手 🌸'
- ];
- document.getElementById('surprise').textContent=
- messages[Math.floor(Math.random()*messages.length)];
-}
-
-function makeShare(){
- let to=params.get('to')||'你';
- let from=params.get('from')||'爱你的人';
- let date=params.get('date')||'';
- let msg=params.get('msg')||'遇见你，是我最幸运的事。希望未来的每一天，都能和你一起度过。';
- let url=new URL(location.href);
- url.search='';
- url.searchParams.set('to',to);
- url.searchParams.set('from',from);
- url.searchParams.set('date',date);
- url.searchParams.set('msg',msg);
-
- for(let i=1;i<=4;i++){
-  let v=document.getElementById('p'+i).value.trim();
-  if(v)url.searchParams.set('p'+i,v);
- }
- let music=document.getElementById('musicUrl').value.trim();
- if(music)url.searchParams.set('music',music);
-
- let link=url.toString();
- document.getElementById('shareLink').value=link;
- document.getElementById('qr').innerHTML=
- '<img alt="二维码" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data='+encodeURIComponent(link)+'">';
-}
-
-function copyLink(){
- let el=document.getElementById('shareLink');
- if(!el.value)return alert('请先生成分享链接');
- el.select();
- el.setSelectionRange(0,99999);
- if(navigator.clipboard&&window.isSecureContext){
-  navigator.clipboard.writeText(el.value).then(()=>alert('链接已复制'));
- }else{
+async function saveCard(){
+  const btn=document.getElementById("save");
+  btn.disabled=true;
+  btn.textContent="正在保存，请稍等...";
   try{
-   document.execCommand('copy');
-   alert('链接已复制');
-  }catch(e){alert('请手动复制链接');}
- }
+    const id=crypto.randomUUID();
+    const files=document.getElementById("files").files;
+    const photos=[];
+    for(let i=0;i<files.length;i++){
+      const ext=(files[i].name.split(".").pop()||"jpg").replace(/[^a-zA-Z0-9]/g,"");
+      photos.push(await upload("cards/"+id+"/photo"+i+"."+ext,files[i]));
+    }
+    const data={
+      to:document.getElementById("to").value,
+      from:document.getElementById("from").value,
+      date:document.getElementById("date").value,
+      message:document.getElementById("message").value,
+      photos
+    };
+    const manifest=new Blob([JSON.stringify(data)],{type:"application/json"});
+    const response=await fetch(SUPABASE_URL+"/storage/v1/object/"+BUCKET+"/cards/"+id+"/card.json",{
+      method:"POST",
+      headers:headers({"Content-Type":"application/json"}),
+      body:manifest
+    });
+    if(!response.ok)throw new Error("保存卡片失败："+await response.text());
+    const link=location.origin+location.pathname+"?id="+id;
+    document.getElementById("result").innerHTML=
+      "<p>❤️ 卡片已保存！</p><input id='sharelink' value='"+esc(link)+"' readonly>"+
+      "<button onclick='copyLink()'>复制分享链接</button>";
+    render(data);
+  }catch(e){
+    alert("保存失败："+e.message);
+    btn.disabled=false;
+    btn.textContent="保存并生成分享链接 ❤️";
+  }
 }
+
+async function copyLink(){
+  const input=document.getElementById("sharelink");
+  try{
+    await navigator.clipboard.writeText(input.value);
+    alert("链接已复制！");
+  }catch(e){
+    input.select();
+    document.execCommand("copy");
+    alert("链接已复制！");
+  }
+}
+
+async function loadCard(){
+  const id=new URLSearchParams(location.search).get("id");
+  if(!id)return;
+  if(!/^[a-zA-Z0-9-]+$/.test(id))return;
+  document.getElementById("intro").textContent="正在打开爱的礼物...";
+  try{
+    const response=await fetch(SUPABASE_URL+"/storage/v1/object/public/"+BUCKET+"/cards/"+id+"/card.json");
+    if(!response.ok)throw new Error("卡片不存在");
+    const data=await response.json();
+    render(data);
+  }catch(e){
+    document.getElementById("intro").textContent="暂时无法打开这份礼物。";
+  }
+}
+
+loadCard();
 </script>
 </body>
 </html>
