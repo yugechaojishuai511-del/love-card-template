@@ -4,459 +4,320 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#fff5f7">
-<title>给你的一封情书</title>
+<title>给你的浪漫</title>
 <style>
-:root {
-  --pink: #e98da7;
-  --deep: #8e5267;
-  --cream: #fff8f3;
-  --rose: #f7dce4;
+*{box-sizing:border-box}
+body{
+  margin:0;color:#634b50;
+  font-family:"PingFang SC","Microsoft YaHei",sans-serif;
+  background:linear-gradient(135deg,#fff5f5,#fce8ed,#fff8ef);
+  overflow-x:hidden;
 }
-* { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
-body {
-  margin: 0;
-  color: #795263;
-  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC",
-    "Microsoft YaHei", sans-serif;
-  background:
-    radial-gradient(circle at 10% 10%, #fff1f5, transparent 40%),
-    radial-gradient(circle at 90% 30%, #ffe7ee, transparent 35%),
-    #fffaf6;
-  overflow-x: hidden;
+button{
+  cursor:pointer;border:none;border-radius:30px;
+  padding:13px 24px;background:#d87891;color:white;
+  font-size:15px;transition:.3s;
 }
-button { font: inherit; cursor: pointer; }
-button:focus-visible { outline: 3px solid #c86b89; outline-offset: 4px; }
-
-#intro {
-  position: fixed;
-  inset: 0;
-  z-index: 20;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, #fff3f6, #f9dce6);
-  transition: opacity .9s, visibility .9s;
+button:hover{transform:translateY(-2px);opacity:.9}
+h1,h2{font-weight:500}
+.container{max-width:900px;margin:auto;padding:30px 20px}
+.center{text-align:center}
+.hidden{display:none!important}
+#intro{
+  position:fixed;inset:0;z-index:10;
+  display:flex;justify-content:center;align-items:center;
+  flex-direction:column;text-align:center;
+  background:linear-gradient(135deg,#ffe6ec,#fff5f0);
 }
-#intro.hide { opacity: 0; visibility: hidden; pointer-events: none; }
-.envelope-wrap { text-align: center; padding: 20px; }
-.envelope {
-  position: relative;
-  width: min(320px, 80vw);
-  height: 210px;
-  margin: 30px auto;
-  background: #e9a4b8;
-  border-radius: 12px;
-  box-shadow: 0 18px 45px #c77e9638;
-  cursor: pointer;
-  transition: transform .4s;
+.envelope{font-size:90px;animation:float 2s infinite ease-in-out}
+@keyframes float{50%{transform:translateY(-12px)}}
+.hero{padding:55px 0 30px;text-align:center}
+.hero h1{font-size:35px;color:#c96d88}
+.subtitle{color:#a9848c}
+.days{
+  display:inline-block;padding:22px 35px;margin:25px 0;
+  border-radius:25px;background:#fff9f5;
+  box-shadow:0 8px 30px #e9c7ce55;
 }
-.envelope:hover { transform: translateY(-6px); }
-.envelope::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: #f4c4d2;
-  clip-path: polygon(0 0, 100% 0, 50% 62%);
-  border-radius: 12px;
-  transform-origin: top;
-  transition: transform .7s;
-  z-index: 2;
+.days strong{font-size:40px;color:#d87891}
+.section{margin:40px 0}
+.section-title{text-align:center;color:#c96d88;margin-bottom:25px}
+.gallery{
+  display:grid;grid-template-columns:repeat(2,1fr);
+  gap:18px;
 }
-.envelope.open::before { transform: rotateX(180deg); }
-.envelope::after {
-  content: "♥";
-  position: absolute;
-  top: 85px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 42px;
-  color: #fff8f8;
-  z-index: 3;
+.photo-card{
+  background:white;padding:12px;border-radius:20px;
+  box-shadow:0 8px 25px #e8c8ce55;
 }
-.envelope-label {
-  position: absolute;
-  bottom: 25px;
-  width: 100%;
-  text-align: center;
-  font-size: 18px;
-  color: #fff;
-  letter-spacing: 4px;
+.photo-card img{
+  width:100%;height:280px;object-fit:cover;
+  border-radius:14px;cursor:pointer;
 }
-.open-btn, .pill {
-  border: none;
-  border-radius: 999px;
-  background: #d97998;
-  color: white;
-  padding: 13px 28px;
-  box-shadow: 0 8px 20px #d9799833;
-  transition: transform .2s, background .2s;
+.photo-card p{text-align:center;line-height:1.8;margin:12px 5px}
+.letter{
+  background:#fffaf5;border-radius:24px;padding:30px;
+  line-height:2.2;white-space:pre-line;
+  box-shadow:0 8px 25px #e8c8ce44;
 }
-.open-btn:hover, .pill:hover { transform: translateY(-2px); background: #c96889; }
-.small-note { color: #a67b8b; font-size: 13px; }
-
-main {
-  max-width: 760px;
-  margin: auto;
-  padding: 30px 20px 80px;
+#letterText{min-height:120px}
+.btn-row{
+  display:flex;flex-wrap:wrap;justify-content:center;
+  gap:12px;margin:25px 0;
 }
-.hero { text-align: center; padding: 55px 10px 30px; }
-.tag {
-  letter-spacing: 4px;
-  color: #bd8297;
-  font-size: 12px;
+#surprise{
+  display:none;background:#fff0f5;padding:30px;
+  border-radius:25px;text-align:center;
+  line-height:2;margin:25px 0;
 }
-h1 {
-  font-weight: 500;
-  font-size: clamp(32px, 8vw, 52px);
-  color: var(--deep);
-  line-height: 1.4;
-  margin: 18px 0;
+footer{text-align:center;padding:40px;color:#b38a94}
+#viewer{
+  position:fixed;inset:0;z-index:20;
+  background:#000d;display:none;
+  justify-content:center;align-items:center;padding:20px;
 }
-.subtitle { line-height: 2; font-size: 15px; color: #9a7182; }
-.divider {
-  width: 70px;
-  height: 1px;
-  background: #e9b9c9;
-  margin: 30px auto;
+#viewer img{max-width:100%;max-height:85vh;border-radius:15px}
+#viewer span{
+  position:absolute;top:20px;right:25px;color:white;
+  font-size:35px;cursor:pointer;
 }
-.section { margin: 45px 0; }
-.section-title {
-  text-align: center;
-  font-size: 24px;
-  font-weight: 500;
-  color: var(--deep);
-  margin-bottom: 12px;
+.heart{
+  position:fixed;bottom:-30px;pointer-events:none;
+  animation:rise 6s linear forwards;z-index:2;
 }
-.section-sub { text-align: center; color: #b28a98; font-size: 13px; }
-.photos {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 15px;
-  margin-top: 28px;
+@keyframes rise{
+  to{transform:translateY(-110vh);opacity:0}
 }
-.photo {
-  padding: 10px 10px 18px;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 10px 35px #a36d7a15;
-  transform: rotate(-1deg);
+@media(max-width:600px){
+  .container{padding:20px 15px}
+  .hero h1{font-size:28px}
+  .gallery{grid-template-columns:1fr}
+  .photo-card img{height:260px}
+  .letter{padding:22px}
 }
-.photo:nth-child(2) { transform: rotate(2deg); }
-.photo:nth-child(3) { transform: rotate(1deg); }
-.photo img {
-  width: 100%;
-  aspect-ratio: 4 / 5;
-  object-fit: cover;
-  border-radius: 8px;
-  display: block;
-}
-.photo p { text-align: center; font-size: 13px; margin: 12px 0 0; color: #a47c8b; }
-.counter {
-  background: linear-gradient(135deg, #fff, #fff2f5);
-  border: 1px solid #f5dce5;
-  border-radius: 22px;
-  padding: 30px 15px;
-  text-align: center;
-  box-shadow: 0 10px 30px #dba0b215;
-}
-.counter-number {
-  font-size: 44px;
-  color: #d97998;
-  font-family: Georgia, serif;
-}
-.counter-caption { margin-top: 10px; font-size: 14px; }
-.letter {
-  background: #fff;
-  border-radius: 22px;
-  padding: clamp(25px, 7vw, 42px);
-  box-shadow: 0 15px 40px #ad778218;
-  line-height: 2.2;
-  font-size: 16px;
-  border: 1px solid #f8e6eb;
-}
-.letter-head { text-align: center; color: #d97998; font-size: 22px; margin-bottom: 20px; }
-.letter-text { white-space: pre-line; }
-.signature { text-align: right; margin-top: 30px; color: #d97998; }
-.surprise {
-  text-align: center;
-  margin: 35px 0;
-}
-#secret {
-  display: none;
-  background: #fff0f5;
-  padding: 25px;
-  border-radius: 20px;
-  text-align: center;
-  margin-top: 20px;
-  line-height: 2;
-  animation: fadeIn .8s;
-}
-#secret.show { display: block; }
-.footer { text-align: center; font-size: 13px; color: #bb91a1; margin-top: 60px; }
-.float-heart {
-  position: fixed;
-  pointer-events: none;
-  z-index: 1;
-  bottom: -40px;
-  animation: floatUp linear forwards;
-  opacity: .65;
-}
-@keyframes floatUp {
-  to { transform: translateY(-110vh) rotate(30deg); opacity: 0; }
-}
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-@media(max-width: 520px) {
-  main { padding: 20px 16px 60px; }
-  .photos { gap: 10px; }
-  .photo { padding: 7px 7px 14px; }
-  .letter { font-size: 15px; }
-}
-@media(prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: .01ms !important;
-    transition-duration: .01ms !important;
-    scroll-behavior: auto !important;
-  }
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
 }
 </style>
 </head>
 <body>
 
-<!-- 开场信封 -->
 <div id="intro">
-  <div class="envelope-wrap">
-    <p class="tag">A LITTLE LOVE LETTER</p>
-    <h1 style="font-size:32px">有一份惊喜给你</h1>
-    <div class="envelope" id="envelope" onclick="openLetter()">
-      <div class="envelope-label">给最特别的你</div>
-    </div>
-    <button class="open-btn" onclick="openLetter()">打开这封信 ♥</button>
-    <p class="small-note">轻轻点击，开启一份温柔</p>
-  </div>
+  <div class="envelope">💌</div>
+  <h1>有一份礼物给你</h1>
+  <p>准备好打开了吗？</p>
+  <button onclick="openCard()">打开我的惊喜</button>
 </div>
 
-<main>
-  <header class="hero">
-    <p class="tag">TO MY FAVORITE PERSON</p>
-    <h1 id="headline">遇见你，是我的浪漫</h1>
-    <p class="subtitle">
-      有些心意想慢慢说给你听。<br>
-      今天也想把所有温柔，送给你。
-    </p>
-    <div class="divider"></div>
-    <div style="font-size:32px">♡ ✧ ♡</div>
-  </header>
+<main id="main" class="hidden">
+<div class="container">
 
-  <!-- 照片区域：可以替换为你自己的照片网址 -->
-  <section class="section">
-    <h2 class="section-title">我们的美好瞬间</h2>
-    <p class="section-sub">每一个值得珍藏的时刻</p>
-    <div class="photos">
-      <div class="photo">
-        <img src="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=800&q=85" alt="浪漫时刻">
-        <p>温柔的瞬间</p>
-      </div>
-      <div class="photo">
-        <img src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=800&q=85" alt="花朵">
-        <p>想与你分享</p>
-      </div>
-      <div class="photo">
-        <img src="https://images.unsplash.com/photo-1518621736915-f3b1c41bfd00?auto=format&fit=crop&w=800&q=85" alt="浪漫夕阳">
-        <p>平凡也浪漫</p>
-      </div>
-      <div class="photo">
-        <img src="https://images.unsplash.com/photo-1516589091380-5d8e1a3a8f5b?auto=format&fit=crop&w=800&q=85" alt="浪漫花束">
-        <p>把美好留住</p>
-      </div>
+<header class="hero">
+  <h1>给我最珍惜的人 ❤️</h1>
+  <p class="subtitle">把每一个平凡的日子，都变成值得记住的日子</p>
+  <div class="days">
+    <div>我们已经一起走过</div>
+    <strong id="daysCount">0</strong>
+    <div>天</div>
+  </div>
+  <p id="dateText"></p>
+</header>
+
+<section class="section">
+  <h2 class="section-title">📷 我们的回忆</h2>
+  <div class="gallery">
+
+    <div class="photo-card">
+      <img src="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=900&q=85" alt="美好回忆一" onclick="viewImage(this)">
+      <p>第一次心动的瞬间<br>希望时间可以停在这里</p>
     </div>
-  </section>
 
-  <!-- 纪念日计时 -->
-  <section class="section">
-    <h2 class="section-title">我们的时间</h2>
-    <p class="section-sub">时间在走，心意不变</p>
-    <div class="counter">
-      <div class="counter-number" id="days">0</div>
-      <div class="counter-caption">天 · 每一天都值得珍惜</div>
+    <div class="photo-card">
+      <img src="https://images.unsplash.com/photo-1511988617509-a57c8a288659?auto=format&fit=crop&w=900&q=85" alt="美好回忆二" onclick="viewImage(this)">
+      <p>一起度过的日子<br>每一天都值得珍藏</p>
     </div>
-  </section>
 
-  <!-- 情书 -->
-  <section class="section">
-    <h2 class="section-title">想对你说的话</h2>
-    <p class="section-sub">请慢慢读完这封信</p>
-    <div class="letter">
-      <div class="letter-head">亲爱的你 ♡</div>
-      <div class="letter-text" id="letterText"></div>
-      <div class="signature">—— 永远珍惜你的人</div>
+    <div class="photo-card">
+      <img src="https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&w=900&q=85" alt="美好回忆三" onclick="viewImage(this)">
+      <p>那些温柔的时光<br>是我最珍贵的宝藏</p>
     </div>
-  </section>
 
-  <!-- 隐藏惊喜 -->
-  <section class="section surprise">
-    <button class="pill" onclick="showSecret()">点击查看隐藏惊喜 ♥</button>
-    <div id="secret">
-      <div style="font-size:36px">💗</div>
-      <p>如果浪漫有形状，</p>
-      <p>那一定是与你相处的每一个瞬间。</p>
-      <p>愿我们永远有说不完的话，</p>
-      <p>有看不完的风景，</p>
-      <p>有彼此陪伴的未来。✨</p>
+    <div class="photo-card">
+      <img src="https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=900&q=85" alt="美好回忆四" onclick="viewImage(this)">
+      <p>未来还有很长<br>想继续和你一起走</p>
     </div>
-  </section>
 
-  <section class="section" style="text-align:center">
-    <button class="pill" onclick="toggleMusic()">♫ 音乐播放 / 暂停</button>
-    <p class="small-note" id="musicHint">音乐功能需要添加自己的音乐文件</p>
-    <div style="margin-top:18px">
-      <button class="pill" onclick="sharePage()">分享这份浪漫 ♡</button>
-    </div>
-  </section>
+  </div>
+</section>
 
-  <footer class="footer">
-    Made with love ♥<br>
-    希望你永远被温柔对待
-  </footer>
+<section class="section">
+  <h2 class="section-title">💌 想对你说的话</h2>
+  <div class="letter">
+    <div id="letterText"></div>
+  </div>
+</section>
+
+<div class="btn-row">
+  <button onclick="toggleMusic()" id="musicBtn">🎵 播放音乐</button>
+  <button onclick="showSurprise()">🎁 打开隐藏惊喜</button>
+  <button onclick="sharePage()">💌 分享这份心意</button>
+</div>
+
+<div id="surprise">
+  <h2>✨ 你是我生活里的小幸运 ✨</h2>
+  <p>如果可以，我希望未来的每一个春夏秋冬，都有你在身边。</p>
+  <p>谢谢你出现，谢谢你成为我的故事。</p>
+  <div style="font-size:40px">❤️ 🌷 💖</div>
+</div>
+
+<footer>
+  <p>愿所有美好，都与你有关。</p>
+  <p>Made with ❤️</p>
+</footer>
+
+</div>
 </main>
 
-<!-- 可选音乐：在下面填入自己的音乐文件网址 -->
-<audio id="music" loop></audio>
+<div id="viewer" onclick="closeViewer()">
+  <span>×</span>
+  <img id="largeImage" src="" alt="放大照片">
+</div>
+
+<audio id="music" loop preload="none">
+  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+</audio>
 
 <script>
-/* =================================================
-   个性化设置区：以后定制客户时主要修改这里
-   ================================================= */
+// ====== 可定制区域 ======
 
-// 纪念日日期：格式 YYYY-MM-DD
+// 修改这里：纪念日
 const anniversaryDate = "2024-05-20";
 
-// 情书内容
+// 修改这里：情书内容
 const letterContent = `谢谢你来到我的世界。
 
-生活有时候很普通，
+生活有时很普通，
 但因为有你，
 一些小小的日常也变得闪闪发光。
 
-希望你开心的时候有人分享，
-难过的时候有人拥抱。
+我喜欢和你分享生活，
+喜欢一起吃饭、散步、聊天，
+也喜欢那些什么都不做，
+却觉得很安心的时刻。
 
-愿未来的日子，
-我们都能成为更好的自己，
-也继续把温柔留给彼此。
+未来的日子还很长，
+希望我们继续认真生活，
+认真爱彼此。
 
-今天、明天、以后，
-都想好好珍惜你。`;
+愿每一次回忆都温柔，
+愿每一次相遇都值得。
 
-// 音乐文件网址（可选）
-// 例如： "music.mp3"（如果文件放在仓库根目录）
-// 为空则不播放
-const musicSource = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3";
-/* ================================================= */
+我爱你 ❤️`;
 
-const letterEl = document.getElementById("letterText");
-const musicEl = document.getElementById("music");
-let typingStarted = false;
+// ====== 功能代码 ======
+
+const music = document.getElementById("music");
 let musicPlaying = false;
 
-function openLetter() {
-  document.getElementById("envelope").classList.add("open");
-  document.getElementById("intro").classList.add("hide");
-  if (!typingStarted) {
-    typingStarted = true;
-    typeLetter();
-  }
+function openCard(){
+  document.getElementById("intro").style.display="none";
+  document.getElementById("main").classList.remove("hidden");
+  updateDays();
+  typeLetter();
 }
 
-function typeLetter() {
-  // 优先考虑可访问性及减少动态效果偏好
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    letterEl.textContent = letterContent;
-    return;
-  }
-  let i = 0;
-  function type() {
-    if (i < letterContent.length) {
-      letterEl.textContent += letterContent.charAt(i);
+function updateDays(){
+  const start = new Date(anniversaryDate+"T00:00:00");
+  const today = new Date();
+  const days = Math.floor((today-start)/86400000);
+  document.getElementById("daysCount").textContent=Math.max(days,0);
+  document.getElementById("dateText").textContent=
+    "纪念日："+anniversaryDate;
+}
+
+function typeLetter(){
+  const el=document.getElementById("letterText");
+  el.textContent="";
+  let i=0;
+  function type(){
+    if(i<letterContent.length){
+      el.textContent+=letterContent.charAt(i);
       i++;
-      setTimeout(type, 45);
+      setTimeout(type,45);
     }
   }
   type();
 }
 
-// 计算相识纪念日天数
-function updateDays() {
-  const start = new Date(anniversaryDate + "T00:00:00");
-  const now = new Date();
-  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  const diff = Math.floor((today - start) / (1000 * 60 * 60 * 24));
-  document.getElementById("days").textContent = Math.max(diff, 0);
-}
-updateDays();
-
-function showSecret() {
-  const secret = document.getElementById("secret");
-  secret.classList.toggle("show");
-}
-
-function toggleMusic() {
-  if (!musicSource) {
-    document.getElementById("musicHint").textContent =
-      "请在代码个性化设置区添加 music.mp3 文件网址后使用";
-    return;
-  }
-  if (!musicEl.src) musicEl.src = musicSource;
-  if (musicPlaying) {
-    musicEl.pause();
-    musicPlaying = false;
-  } else {
-    musicEl.play().then(() => {
-      musicPlaying = true;
-    }).catch(() => {
-      document.getElementById("musicHint").textContent =
-        "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3";
-    });
+async function toggleMusic(){
+  if(!musicPlaying){
+    try{
+      await music.play();
+      musicPlaying=true;
+      document.getElementById("musicBtn").textContent="🎵 暂停音乐";
+    }catch(e){
+      alert("音乐加载失败，请稍后再试。");
+    }
+  }else{
+    music.pause();
+    musicPlaying=false;
+    document.getElementById("musicBtn").textContent="🎵 播放音乐";
   }
 }
 
-async function sharePage() {
-  const url = location.href;
-  if (navigator.share) {
-    try {
+function showSurprise(){
+  const box=document.getElementById("surprise");
+  box.style.display="block";
+  box.scrollIntoView({behavior:"smooth"});
+  createHearts();
+}
+
+function viewImage(img){
+  document.getElementById("largeImage").src=img.src;
+  document.getElementById("viewer").style.display="flex";
+}
+
+function closeViewer(){
+  document.getElementById("viewer").style.display="none";
+}
+
+async function sharePage(){
+  const url=location.href;
+  try{
+    if(navigator.share){
       await navigator.share({
-        title: document.title,
-        text: "送你一份小小的浪漫 ♥",
-        url: url
+        title:"给你的浪漫",
+        text:"有一份浪漫的礼物想分享给你",
+        url:url
       });
-      return;
-    } catch (e) {}
-  }
-  try {
-    await navigator.clipboard.writeText(url);
-    alert("网页链接已复制，可以发送给对方啦 ♥");
-  } catch (e) {
-    prompt("复制下面的网址分享：", url);
+    }else{
+      await navigator.clipboard.writeText(url);
+      alert("网页链接已复制，可以分享给朋友啦！");
+    }
+  }catch(e){
+    if(e.name!=="AbortError"){
+      alert("分享失败，请手动复制网页链接。");
+    }
   }
 }
 
-// 漂浮爱心
-function createHeart() {
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-  const heart = document.createElement("div");
-  heart.className = "float-heart";
-  heart.textContent = ["♥", "♡", "💗", "✧", "💕"][Math.floor(Math.random()*5)];
-  heart.style.left = Math.random() * 100 + "vw";
-  heart.style.fontSize = (14 + Math.random() * 20) + "px";
-  heart.style.animationDuration = (6 + Math.random() * 6) + "s";
-  document.body.appendChild(heart);
-  setTimeout(() => heart.remove(), 12000);
+function createHearts(){
+  for(let i=0;i<18;i++){
+    const heart=document.createElement("div");
+    heart.className="heart";
+    heart.textContent=["❤️","💕","💗","💖","🌸"][Math.floor(Math.random()*5)];
+    heart.style.left=Math.random()*100+"vw";
+    heart.style.fontSize=(18+Math.random()*20)+"px";
+    heart.style.animationDuration=(4+Math.random()*4)+"s";
+    document.body.appendChild(heart);
+    setTimeout(()=>heart.remove(),8000);
+  }
 }
-setInterval(createHeart, 800);
+
+// 点击页面关闭放大图片
+document.addEventListener("keydown",e=>{
+  if(e.key==="Escape")closeViewer();
+});
 </script>
 </body>
 </html>
